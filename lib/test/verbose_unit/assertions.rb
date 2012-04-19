@@ -1,4 +1,5 @@
 require 'rubygems'
+require "bundler/setup"
 require 'ruby_parser'
 require 'ruby2ruby'
 require 'test/verbose_unit/assertion_failed_error'
