@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Test::VerboseUnit::Assertions
+  
+    &mdash; Documentation by YARD 0.7.5
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (A)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Test.html" title="Test (module)">Test</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../VerboseUnit.html" title="Test::VerboseUnit (module)">VerboseUnit</a></span></span>
+     &raquo; 
+    <span class="title">Assertions</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Test::VerboseUnit::Assertions
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+    <dt class="r1">Included in:</dt>
+    <dd class="r1"><span class='object_link'><a href="TestCase.html" title="Test::VerboseUnit::TestCase (class)">TestCase</a></span></dd>
+    
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/test/verbose_unit/assertions.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Assertions module is where all the magick is hidden. It contains only one
+assertion: #assert_equal, which is not very complicated by itself.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#assert_equal-instance_method" title="#assert_equal (instance method)">- (Object) <strong>assert_equal</strong>(a, b) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+This method compares its arguments using standard == operator.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="assert_equal-instance_method">
+  
+    - (<tt>Object</tt>) <strong>assert_equal</strong>(a, b) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+This method compares its arguments using standard == operator. Operands
+order is the same as params in method invocation.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Parameters:</h3>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>a</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+first operand of comparison
+</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>b</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+second operand of comparison
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<h3>Raises:</h3>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>
+AssertionFailedException   if comparison evaluates as false
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/test/verbose_unit/assertions.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='rparen'>)</span>
+  <span class='comment'># Here you can see it with your own eyes:
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>==</span> <span class='id identifier rubyid_b'>b</span>
+  <span class='kw'>else</span>
+    <span class='comment'># When assertion fails, try to get code for arguments. This task is
+</span>    <span class='comment'># delegated to another method, in case we may want to write more
+</span>    <span class='comment'># assertions.
+</span>    <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='id identifier rubyid_get_arguments_code'>get_arguments_code</span>
+
+    <span class='comment'># Something *may* go wrong. Always. Especially with this sort of code.
+</span>    <span class='comment'># In that case we rely on our method returning nil and fallback to
+</span>    <span class='comment'># usual message.
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>!=</span> <span class='int'>2</span>
+      <span class='comment'># Prepared backtrace is provided for exception object to not include
+</span>      <span class='comment'># following line as source of an error, but rather line where
+</span>      <span class='comment'># assertion was called from.
+</span>      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>AssertionFailedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> != </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_caller'>caller</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='comment'># But when everything is ok, args should contain code of two arguments,
+</span>      <span class='comment'># and we still can provide their values as additional information.
+</span>      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>AssertionFailedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> != </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>\nwhere:\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+      <span class='id identifier rubyid_caller'>caller</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Thu Apr 19 17:46:40 2012 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.5 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>
