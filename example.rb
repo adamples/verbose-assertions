@@ -20,7 +20,8 @@ require 'test/verbose_unit'
 #
 # In C we could do something like this:
 #
-#   assert(a) ( (a) ? (1) : ( printf ("%s:%d: %s(): assertion failed (%s).\n", __FILE__, __LINE__, __FUNCTION__, #a), 0) )
+#   assert(a) ( (a) ? (1) : ( printf ("%s:%d: %s(): assertion failed (%s).\n", \
+#     __FILE__, __LINE__, __FUNCTION__, #a), 0) )
 #
 # Preprocessor will replace #a with actual *code* that we passed to macro, eg.
 #
@@ -78,11 +79,11 @@ class ExampleTestCase < Test::VerboseUnit::TestCase
   def test_2
     # This assertion arguments contain many syntax structures that are hard
     # to parse without actual ruby parser, eg. strings and comments with brackets,
-    # event whole loops, as they return value too.
+    # even whole loops, as they return value too.
     assert_equal(
 
       "Jakis\") tekst".kind_of?(
-          Fixnum
+          10.class.name.class
         ),
       # Some (comment "string"
       123

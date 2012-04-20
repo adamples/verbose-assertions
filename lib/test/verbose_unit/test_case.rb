@@ -40,7 +40,7 @@ module Test
             instance.teardown if instance.respond_to?(:teardown)
           rescue AssertionFailedError => e
             puts
-            puts "Assertion failed in `#{m}'"
+            puts "Assertion failed in `#{instance.class.name}##{m}'"
             puts e.message
             puts "backtrace:"
             puts e.backtrace.join("\n")
