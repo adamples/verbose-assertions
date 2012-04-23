@@ -54,349 +54,528 @@
     
     <iframe id="search_frame"></iframe>
     
-    <div id="content"><div id='filecontents'><h1>README</h1>
+    <div id="content"><div id='filecontents'><h1>VerboseAssertions</h1>
 <h2>example.rb</h2>
 <pre class="code ruby"><code>
-  <span class='gvar'>$:</span><span class='period'>.</span><span class='id identifier rubyid_unshift'>unshift</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>./lib</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-
-  <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>test/verbose_unit</span><span class='tstring_end'>'</span></span>
-
-  <span class='comment'># Basic problem with test/unit and test-unit frameworks for Ruby which this code
-</span>  <span class='comment'># tries to address is that:
-</span>  <span class='comment'>#
-</span>  <span class='comment'>#   assert(checkSomething())
-</span>  <span class='comment'>#
-</span>  <span class='comment'># results in most helpful message like this:
-</span>  <span class='comment'>#
-</span>  <span class='comment'>#   &lt;false&gt; is not &lt;true&gt;
-</span>  <span class='comment'>#
-</span>  <span class='comment'># Of course libraries enable us to pass additional message as last parameter
-</span>  <span class='comment'># of assertion, but that's not very convinient. In fact it's not convinient
-</span>  <span class='comment'># at all. And as we consider ourselves lazy (but in a good way!) we just need
-</span>  <span class='comment'># to spent few hours to find a solution -- code that will generate more
-</span>  <span class='comment'># appropriate error messages.
-</span>  <span class='comment'>#
-</span>  <span class='comment'># In C we could do something like this:
-</span>  <span class='comment'>#
-</span>  <span class='comment'>#   assert(a) ( (a) ? (1) : ( printf (&quot;%s:%d: %s(): assertion failed (%s).\n&quot;, __FILE__, __LINE__, __FUNCTION__, #a), 0) )
-</span>  <span class='comment'>#
-</span>  <span class='comment'># Preprocessor will replace #a with actual *code* that we passed to macro, eg.
-</span>  <span class='comment'>#
-</span>  <span class='comment'>#   assert(2 * 2 == 5)
-</span>  <span class='comment'>#
-</span>  <span class='comment'># Will produce output:
-</span>  <span class='comment'>#
-</span>  <span class='comment'>#   file.c:44: function(): assertion failed(2 * 2 == 5).
-</span>  <span class='comment'>#
-</span>  <span class='comment'># Now we know what is wrong at a glance. But we cannot simply apply this approach
-</span>  <span class='comment'># to Ruby, unless we use some custom preprocessor -- typical ruby interpreter from
-</span>  <span class='comment'># typical ruby installation has no preprocessor.
-</span>  <span class='comment'>#
-</span>  <span class='comment'># On the other hand Ruby is interpreted language. Source files can be accessed
-</span>  <span class='comment'># from code like any other files. Actually Ruby always passes IO handler to actual
-</span>  <span class='comment'># file as global constant (__DATA__). So why not in case of failed assertion just
-</span>  <span class='comment'># open file which called it and read params list?
-</span>  <span class='comment'>#
-</span>  <span class='comment'># This simple idea does have some problems, but we will talk them later. For now
-</span>  <span class='comment'># we will just define interface that we *want* to use. To find out how it works
-</span>  <span class='comment'># proceed to Test::VerboseUnit::TestCase class documentation.
-</span>  <span class='comment'>#
-</span>  <span class='comment'># Code of following class should be familiar to everyone, who have ever had any
-</span>  <span class='comment'># interaction with unit testing frameworks in Ruby. It inherits some base class
-</span>  <span class='comment'># from framework, which usually provides assertion methods and some magic/logic
-</span>  <span class='comment'># that runs tests.
-</span>  <span class='comment'>#
-</span>  <span class='comment'># Our work is to define test methods.
-</span>  <span class='kw'>class</span> <span class='const'>ExampleTestCase</span> <span class='op'>&lt;</span> <span class='const'>Test</span><span class='op'>::</span><span class='const'>VerboseUnit</span><span class='op'>::</span><span class='const'>TestCase</span>
-
-    <span class='comment'># Test method is identified by its name (beginning with &quot;test&quot; string).
-</span>    <span class='kw'>def</span> <span class='id identifier rubyid_test_1'>test_1</span>
-      <span class='comment'># Here we do some calulcations; usually we use some library that we want
-</span>      <span class='comment'># to test
-</span>      <span class='id identifier rubyid_b'>b</span> <span class='op'>=</span> <span class='int'>0</span>
-      <span class='int'>1000000</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span>
-        <span class='id identifier rubyid_b'>b</span> <span class='op'>+=</span> <span class='float'>0.000004</span>
+    <span class='gvar'>$:</span><span class='period'>.</span><span class='id identifier rubyid_unshift'>unshift</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>./lib</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    
+    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>test/verbose_unit</span><span class='tstring_end'>'</span></span>
+    
+    
+    <span class='comment'># Basic problem with test/unit and test-unit frameworks for Ruby which this code
+</span>    <span class='comment'># tries to address is that:
+</span>    <span class='comment'>#
+</span>    <span class='comment'>#   assert(checkSomething())
+</span>    <span class='comment'>#
+</span>    <span class='comment'># results in most helpful message like this:
+</span>    <span class='comment'>#
+</span>    <span class='comment'>#   &lt;false&gt; is not &lt;true&gt;
+</span>    <span class='comment'>#
+</span>    <span class='comment'># Of course libraries enable us to pass additional message as last parameter
+</span>    <span class='comment'># of assertion, but that's not very convinient. In fact it's not convinient
+</span>    <span class='comment'># at all. And as we consider ourselves lazy (but in a good way!) we just need
+</span>    <span class='comment'># to spent few hours to find a solution -- code that will generate more
+</span>    <span class='comment'># appropriate error messages.
+</span>    <span class='comment'>#
+</span>    <span class='comment'># In C we could do something like this:
+</span>    <span class='comment'>#
+</span>    <span class='comment'>#   assert(a) ( (a) ? (1) : ( printf (&quot;%s:%d: %s(): assertion failed (%s).\n&quot;, \
+</span>    <span class='comment'>#     __FILE__, __LINE__, __FUNCTION__, #a), 0) )
+</span>    <span class='comment'>#
+</span>    <span class='comment'># Preprocessor will replace #a with actual *code* that we passed to macro, eg.
+</span>    <span class='comment'>#
+</span>    <span class='comment'>#   assert(2 * 2 == 5)
+</span>    <span class='comment'>#
+</span>    <span class='comment'># Will produce output:
+</span>    <span class='comment'>#
+</span>    <span class='comment'>#   file.c:44: function(): assertion failed(2 * 2 == 5).
+</span>    <span class='comment'>#
+</span>    <span class='comment'># Now we know what is wrong at a glance. But we cannot simply apply this approach
+</span>    <span class='comment'># to Ruby, unless we use some custom preprocessor -- typical ruby interpreter from
+</span>    <span class='comment'># typical ruby installation has no preprocessor.
+</span>    <span class='comment'>#
+</span>    <span class='comment'># On the other hand Ruby is interpreted language. Source files can be accessed
+</span>    <span class='comment'># from code like any other files. Actually Ruby always passes IO handler to actual
+</span>    <span class='comment'># file as global constant (__DATA__). So why not in case of failed assertion just
+</span>    <span class='comment'># open file which called it and read params list?
+</span>    <span class='comment'>#
+</span>    <span class='comment'># This simple idea does have some problems, but we will talk them later. For now
+</span>    <span class='comment'># we will just define interface that we *want* to use. To find out how it works
+</span>    <span class='comment'># proceed to Test::VerboseUnit::TestCase class documentation.
+</span>    <span class='comment'>#
+</span>    <span class='comment'># Code of following class should be familiar to everyone, who have ever had any
+</span>    <span class='comment'># interaction with unit testing frameworks in Ruby. It inherits some base class
+</span>    <span class='comment'># from framework, which usually provides assertion methods and some magic/logic
+</span>    <span class='comment'># that runs tests.
+</span>    <span class='comment'>#
+</span>    <span class='comment'># Our work is to define test methods.
+</span>    <span class='kw'>class</span> <span class='const'>ExampleTestCase</span> <span class='op'>&lt;</span> <span class='const'>Test</span><span class='op'>::</span><span class='const'>VerboseUnit</span><span class='op'>::</span><span class='const'>TestCase</span>
+    
+    
+      <span class='comment'># Test method is identified by its name (beginning with &quot;test&quot; string).
+</span>      <span class='kw'>def</span> <span class='id identifier rubyid_test_1'>test_1</span>
+        <span class='comment'># Here we do some calulcations; usually we use some library that we want
+</span>        <span class='comment'># to test
+</span>        <span class='id identifier rubyid_b'>b</span> <span class='op'>=</span> <span class='int'>0</span>
+        <span class='int'>1000000</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span>
+          <span class='id identifier rubyid_b'>b</span> <span class='op'>+=</span> <span class='float'>0.000004</span>
+        <span class='kw'>end</span>
+    
+        <span class='comment'># And here we test is result is correct. Two expressions are passed to
+</span>        <span class='comment'># assertion method. If it fails (and it will), we expect error message in
+</span>        <span class='comment'># following hair:
+</span>        <span class='comment'>#
+</span>        <span class='comment'>#   assert_equal failed in test_1!
+</span>        <span class='comment'>#   2 * 2 != b
+</span>        <span class='comment'>#     2 * 2 = 4
+</span>        <span class='comment'>#     b = 3.9999...
+</span>        <span class='comment'>#   backtrace follows...
+</span>        <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span><span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_exp'>exp</span><span class='lparen'>(</span><span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_log'>log</span><span class='lparen'>(</span><span class='int'>4</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='rparen'>)</span>
       <span class='kw'>end</span>
-
-      <span class='comment'># And here we test is result is correct. Two expressions are passed to
-</span>      <span class='comment'># assertion method. If it fails (and it will), we expect error message in
-</span>      <span class='comment'># following hair:
-</span>      <span class='comment'>#
-</span>      <span class='comment'>#   assert_equal failed in test_1!
-</span>      <span class='comment'>#   2 * 2 != b
-</span>      <span class='comment'>#     2 * 2 = 4
-</span>      <span class='comment'>#     b = 3.9999...
-</span>      <span class='comment'>#   backtrace follows...
-</span>      <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span><span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_exp'>exp</span><span class='lparen'>(</span><span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_log'>log</span><span class='lparen'>(</span><span class='int'>4</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='rparen'>)</span>
+    
+    
+      <span class='comment'># This method in turn will do assertion with somewhat more complex invocation
+</span>      <span class='kw'>def</span> <span class='id identifier rubyid_test_2'>test_2</span>
+        <span class='comment'># This assertion arguments contain many syntax structures that are hard
+</span>        <span class='comment'># to parse without actual ruby parser, eg. strings and comments with brackets,
+</span>        <span class='comment'># even whole loops, as they return value too.
+</span>        <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span>
+    
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Jakis\&quot;) tekst</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span>
+              <span class='int'>10</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span>
+            <span class='rparen'>)</span><span class='comma'>,</span>
+          <span class='comment'># Some (comment &quot;string&quot;
+</span>          <span class='int'>123</span>
+        <span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    
+    
+      <span class='comment'># In this example we use even more complex syntax, but it aims to show other
+</span>      <span class='comment'># thing. Statements below can be described in Ruby in more than one way. For
+</span>      <span class='comment'># example strings can be denoted using apostrophes or quotation marks. If you
+</span>      <span class='comment'># run this test, you will see, that syntax used in exception message differs
+</span>      <span class='comment'># from original code (this can be considered as another limitation or a feature
+</span>      <span class='comment'># of library).
+</span>      <span class='kw'>def</span> <span class='id identifier rubyid_test_3'>test_3</span>
+        <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span>
+          <span class='qwords_beg'>%w[</span><span class='tstring_content'>warsaw</span><span class='words_sep'> </span><span class='tstring_content'>berlin</span><span class='words_sep'> </span><span class='tstring_content'>paris</span><span class='words_sep'> </span><span class='tstring_content'>budapest</span><span class='words_sep'>]</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>i</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+          <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>warsaw</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>budapest</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
+            <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_capitalize'>capitalize</span>
+          <span class='kw'>end</span>
+        <span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    
     <span class='kw'>end</span>
-
-    <span class='comment'># This method in turn will do assertion with somewhat more complex invocation
-</span>    <span class='kw'>def</span> <span class='id identifier rubyid_test_2'>test_2</span>
-      <span class='comment'># This assertion arguments contain many syntax structures that are hard
-</span>      <span class='comment'># to parse without actual ruby parser, eg. strings and comments with brackets,
-</span>      <span class='comment'># event whole loops, as they return value too.
-</span>      <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span>
-
-        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Jakis\&quot;) tekst</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span>
-            <span class='const'>Fixnum</span>
-          <span class='rparen'>)</span><span class='comma'>,</span>
-        <span class='comment'># Some (comment &quot;string&quot;
-</span>        <span class='int'>123</span>
-      <span class='rparen'>)</span>
-    <span class='kw'>end</span>
-
-  <span class='kw'>end</span>
-
-  <span class='comment'># To keep code dry, logic that runs tests automagicly is not included. Instead
-</span>  <span class='comment'># run method is invoked directly.
-</span>  <span class='const'>ExampleTestCase</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
+    
+    
+    <span class='comment'># To keep code dry, logic that runs tests automagicly is not included. Instead
+</span>    <span class='comment'># run method is invoked directly.
+</span>    <span class='const'>ExampleTestCase</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
 </code></pre>
-<h2>test/verbose_unit/test_case.rb</h2>
+<h2>lib/test/verbose_unit/test_case.rb</h2>
 <pre class="code ruby"><code>
-  <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>test/verbose_unit/assertions</span><span class='tstring_end'>'</span></span>
-
-  <span class='kw'>module</span> <span class='const'>Test</span>
-    <span class='kw'>module</span> <span class='const'>VerboseUnit</span>
-
-      <span class='comment'># Here is simpliest possible base class for unit testing. It includes module
-</span>      <span class='comment'># with assertions and defines one method, used to run testing methods.
-</span>      <span class='kw'>class</span> <span class='const'>TestCase</span>
-
-        <span class='id identifier rubyid_include'>include</span> <span class='const'>Assertions</span>
-
-        <span class='comment'># Run method enumerates instance methods of a class and runs those
-</span>        <span class='comment'># named test*; for each invocation a new object is created. Failure of
-</span>        <span class='comment'># assertion is passed as exception from that method -- all we need to do
-</span>        <span class='comment'># is to print message and backtrace. This means, that message must be
-</span>        <span class='comment'># created inside assertion method, where exception is thrown. Definition
-</span>        <span class='comment'># of those methods can be found in Assertions module.
-</span>        <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
-
-          <span class='comment'># Get instance methods named test*
-</span>          <span class='id identifier rubyid_methods'>methods</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_instance_methods'>instance_methods</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_m'>m</span><span class='op'>|</span>
-            <span class='id identifier rubyid_m'>m</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>test</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='op'>==</span> <span class='int'>0</span>
-          <span class='kw'>end</span>
-
-          <span class='comment'># For each test method:
-</span>          <span class='comment'>#   - create new object
-</span>          <span class='comment'>#   - call setup
-</span>          <span class='comment'>#   - call test method
-</span>          <span class='comment'>#   - call teardown
-</span>          <span class='comment'>#   - call cleanup
-</span>          <span class='id identifier rubyid_methods'>methods</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_m'>m</span><span class='op'>|</span>
-            <span class='id identifier rubyid_instance'>instance</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
-
-            <span class='kw'>begin</span>
-              <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_setup'>setup</span> <span class='kw'>if</span> <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:setup</span><span class='rparen'>)</span>
-              <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='rparen'>)</span>
-              <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_teardown'>teardown</span> <span class='kw'>if</span> <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:teardown</span><span class='rparen'>)</span>
-            <span class='kw'>rescue</span> <span class='const'>AssertionFailedError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
-              <span class='id identifier rubyid_puts'>puts</span>
-              <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Assertion failed in `</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_m'>m</span><span class='rbrace'>}</span><span class='tstring_content'>'</span><span class='tstring_end'>&quot;</span></span>
-              <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span>
-              <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>backtrace:</span><span class='tstring_end'>&quot;</span></span>
-              <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-            <span class='kw'>ensure</span>
-              <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_cleanup'>cleanup</span> <span class='kw'>if</span> <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:cleanup</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>test/verbose_unit/assertions</span><span class='tstring_end'>'</span></span>
+    
+    
+    <span class='kw'>module</span> <span class='const'>Test</span>
+      <span class='kw'>module</span> <span class='const'>VerboseUnit</span>
+    
+    
+        <span class='comment'># Here is simpliest possible base class for unit testing. It includes module
+</span>        <span class='comment'># with assertions and defines one method, used to run testing methods.
+</span>        <span class='kw'>class</span> <span class='const'>TestCase</span>
+    
+          <span class='id identifier rubyid_include'>include</span> <span class='const'>Assertions</span>
+    
+    
+          <span class='comment'># Run method enumerates instance methods of a class and runs those
+</span>          <span class='comment'># named test*; for each invocation a new object is created. Failure of
+</span>          <span class='comment'># assertion is passed as exception from that method -- all we need to do
+</span>          <span class='comment'># is to print message and backtrace. This means, that message must be
+</span>          <span class='comment'># created inside assertion method, where exception is thrown. Definition
+</span>          <span class='comment'># of those methods can be found in Assertions module.
+</span>          <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
+    
+            <span class='comment'># Get instance methods named test*
+</span>            <span class='id identifier rubyid_methods'>methods</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_instance_methods'>instance_methods</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_m'>m</span><span class='op'>|</span>
+              <span class='id identifier rubyid_m'>m</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>test</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='op'>==</span> <span class='int'>0</span>
+            <span class='kw'>end</span>
+    
+            <span class='comment'># For each test method:
+</span>            <span class='comment'>#   - create new object
+</span>            <span class='comment'>#   - call setup
+</span>            <span class='comment'>#   - call test method
+</span>            <span class='comment'>#   - call teardown
+</span>            <span class='comment'>#   - call cleanup
+</span>            <span class='id identifier rubyid_methods'>methods</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_m'>m</span><span class='op'>|</span>
+              <span class='id identifier rubyid_instance'>instance</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+    
+              <span class='kw'>begin</span>
+                <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_setup'>setup</span> <span class='kw'>if</span> <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:setup</span><span class='rparen'>)</span>
+                <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='rparen'>)</span>
+                <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_teardown'>teardown</span> <span class='kw'>if</span> <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:teardown</span><span class='rparen'>)</span>
+              <span class='kw'>rescue</span> <span class='const'>AssertionFailedError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+                <span class='id identifier rubyid_puts'>puts</span>
+                <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Assertion failed in `</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbrace'>}</span><span class='tstring_content'>#</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_m'>m</span><span class='rbrace'>}</span><span class='tstring_content'>'</span><span class='tstring_end'>&quot;</span></span>
+                <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span>
+                <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>backtrace:</span><span class='tstring_end'>&quot;</span></span>
+                <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+              <span class='kw'>ensure</span>
+                <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_cleanup'>cleanup</span> <span class='kw'>if</span> <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:cleanup</span><span class='rparen'>)</span>
+              <span class='kw'>end</span>
             <span class='kw'>end</span>
           <span class='kw'>end</span>
+    
         <span class='kw'>end</span>
-
-      <span class='kw'>end</span>
-
-    <span class='kw'>end</span> <span class='comment'># module VerboseUnit
-</span>  <span class='kw'>end</span> <span class='comment'># module Test
+    
+    
+      <span class='kw'>end</span> <span class='comment'># module VerboseUnit
+</span>    <span class='kw'>end</span> <span class='comment'># module Test
 </span></code></pre>
-<h2>test/verbose_unit/assertions.rb</h2>
+<h2>lib/test/verbose_unit/assertions.rb</h2>
 <pre class="code ruby"><code>
-  <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>rubygems</span><span class='tstring_end'>'</span></span>
-  <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>ruby_parser</span><span class='tstring_end'>'</span></span>
-  <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>ruby2ruby</span><span class='tstring_end'>'</span></span>
-  <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>test/verbose_unit/assertion_failed_error</span><span class='tstring_end'>'</span></span>
-
-  <span class='kw'>module</span> <span class='const'>Test</span>
-    <span class='kw'>module</span> <span class='const'>VerboseUnit</span>
-
-      <span class='comment'># Assertions module is where all the magick is hidden. It contains only one
-</span>      <span class='comment'># assertion: #assert_equal, which is not very complicated by itself.
-</span>      <span class='kw'>module</span> <span class='const'>Assertions</span>
-
-        <span class='id identifier rubyid_public'>public</span>
-
-        <span class='comment'># This method compares its arguments using standard == operator. Operands
-</span>        <span class='comment'># order is the same as params in method invocation.
-</span>        <span class='comment'>#
-</span>        <span class='comment'># @param a  first operand of comparison
-</span>        <span class='comment'># @param b  second operand of comparison
-</span>        <span class='comment'># @raise AssertionFailedException   if comparison evaluates as false
-</span>        <span class='kw'>def</span> <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='rparen'>)</span>
-          <span class='comment'># Here you can see it with your own eyes:
-</span>          <span class='kw'>if</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>==</span> <span class='id identifier rubyid_b'>b</span>
-          <span class='kw'>else</span>
-            <span class='comment'># When assertion fails, try to get code for arguments. This task is
-</span>            <span class='comment'># delegated to another method, in case we may want to write more
-</span>            <span class='comment'># assertions.
-</span>            <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='id identifier rubyid_get_arguments_code'>get_arguments_code</span>
-
-            <span class='comment'># Something *may* go wrong. Always. Especially with this sort of code.
-</span>            <span class='comment'># In that case we rely on our method returning nil and fallback to
-</span>            <span class='comment'># usual message.
-</span>            <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>!=</span> <span class='int'>2</span>
-              <span class='comment'># Prepared backtrace is provided for exception object to not include
-</span>              <span class='comment'># following line as source of an error, but rather line where
-</span>              <span class='comment'># assertion was called from.
-</span>              <span class='id identifier rubyid_raise'>raise</span> <span class='const'>AssertionFailedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> != </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_caller'>caller</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>rubygems</span><span class='tstring_end'>'</span></span>
+    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>bundler/setup</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>ruby_parser</span><span class='tstring_end'>'</span></span>
+    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>ruby2ruby</span><span class='tstring_end'>'</span></span>
+    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>test/verbose_unit/assertion_failed_error</span><span class='tstring_end'>'</span></span>
+    
+    
+    <span class='kw'>module</span> <span class='const'>Test</span>
+      <span class='kw'>module</span> <span class='const'>VerboseUnit</span>
+    
+    
+        <span class='comment'># Assertions module is where all the magick is hidden. It contains only one
+</span>        <span class='comment'># assertion: #assert_equal, which is not very complicated by itself.
+</span>        <span class='kw'>module</span> <span class='const'>Assertions</span>
+    
+          <span class='id identifier rubyid_public'>public</span>
+    
+          <span class='comment'># This method compares its arguments using standard == operator. Operands
+</span>          <span class='comment'># order is the same as params in method invocation.
+</span>          <span class='comment'>#
+</span>          <span class='comment'># @param a  first operand of comparison
+</span>          <span class='comment'># @param b  second operand of comparison
+</span>          <span class='comment'># @raise AssertionFailedException   if comparison evaluates as false
+</span>          <span class='kw'>def</span> <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='rparen'>)</span>
+            <span class='comment'># Here you can see it with your own eyes:
+</span>            <span class='kw'>if</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>==</span> <span class='id identifier rubyid_b'>b</span>
             <span class='kw'>else</span>
-              <span class='comment'># But when everything is ok, args should contain code of two arguments,
-</span>              <span class='comment'># and we still can provide their values as additional information.
-</span>              <span class='id identifier rubyid_raise'>raise</span> <span class='const'>AssertionFailedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> != </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>\nwhere:\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
-                <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
-                <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
-              <span class='id identifier rubyid_caller'>caller</span><span class='rparen'>)</span>
+              <span class='comment'># When assertion fails, try to get code for arguments. This task is
+</span>              <span class='comment'># delegated to another method, in case we may want to write more
+</span>              <span class='comment'># assertions.
+</span>              <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='id identifier rubyid_get_arguments_code'>get_arguments_code</span>
+    
+              <span class='comment'># Something *may* go wrong. Always. Especially with this sort of code.
+</span>              <span class='comment'># In that case we rely on our method returning nil and fallback to
+</span>              <span class='comment'># usual message.
+</span>              <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>!=</span> <span class='int'>2</span>
+                <span class='comment'># Prepared backtrace is provided for exception object to not include
+</span>                <span class='comment'># following line as source of an error, but rather line where
+</span>                <span class='comment'># assertion was called from.
+</span>                <span class='id identifier rubyid_raise'>raise</span> <span class='const'>AssertionFailedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> != </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_caller'>caller</span><span class='rparen'>)</span>
+              <span class='kw'>else</span>
+                <span class='comment'># But when everything is ok, args should contain code of two arguments,
+</span>                <span class='comment'># and we still can provide their values as additional information.
+</span>                <span class='id identifier rubyid_raise'>raise</span> <span class='const'>AssertionFailedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> != </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>\nwhere:\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
+                  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
+                  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+                <span class='id identifier rubyid_caller'>caller</span><span class='rparen'>)</span>
+              <span class='kw'>end</span>
             <span class='kw'>end</span>
           <span class='kw'>end</span>
-        <span class='kw'>end</span>
-
-        <span class='id identifier rubyid_protected'>protected</span>
-
-        <span class='comment'># Returns code of arguments of calling method as an array of strings. When
-</span>        <span class='comment'># fails to find this data, returns nil.
-</span>        <span class='comment'>#
-</span>        <span class='comment'># Hic sunt leones
-</span>        <span class='comment'>#
-</span>        <span class='comment'># @return [Array]   code of arguments of calling method or nil in case of
-</span>        <span class='comment'>#   failure.
-</span>        <span class='kw'>def</span> <span class='id identifier rubyid_get_arguments_code'>get_arguments_code</span>
-
-          <span class='comment'># Stack trace certainly will be useful.
-</span>          <span class='id identifier rubyid_stack_trace'>stack_trace</span> <span class='op'>=</span> <span class='id identifier rubyid_caller'>caller</span>
-
-          <span class='comment'># First of all, calling method name will be needed. It's simply parsed
-</span>          <span class='comment'># from stack trace using regexp.
-</span>          <span class='id identifier rubyid_method'>method</span> <span class='op'>=</span> <span class='id identifier rubyid_stack_trace'>stack_trace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>:in `(.*)'</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
-
-          <span class='comment'># Going deeper, file path and line, where previous method was called are
-</span>          <span class='comment'># parsed.
-</span>          <span class='id identifier rubyid_t'>t</span> <span class='op'>=</span> <span class='id identifier rubyid_stack_trace'>stack_trace</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([^:]+):(\d+):</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
-          <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='id identifier rubyid_t'>t</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
-          <span class='id identifier rubyid_line_number'>line_number</span> <span class='op'>=</span> <span class='id identifier rubyid_t'>t</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
-
-          <span class='comment'># Read the file
-</span>          <span class='id identifier rubyid_lines'>lines</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-
-          <span class='kw'>begin</span>
-            <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>r</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_io'>io</span><span class='op'>|</span>
-              <span class='id identifier rubyid_lines'>lines</span> <span class='op'>=</span> <span class='id identifier rubyid_io'>io</span><span class='period'>.</span><span class='id identifier rubyid_readlines'>readlines</span>
-            <span class='kw'>end</span>
-          <span class='kw'>rescue</span> <span class='const'>Errno</span><span class='op'>::</span><span class='const'>ENOENT</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
-            <span class='comment'># May this file not exist at all? I don't know, but it will be foolish
-</span>            <span class='comment'># to assume, that if I don't know, it cannot happen.
-</span>            <span class='kw'>return</span> <span class='kw'>nil</span>
-          <span class='kw'>rescue</span> <span class='const'>IOError</span>
-            <span class='comment'># This can happen always for several reasons
-</span>            <span class='kw'>return</span> <span class='kw'>nil</span>
-          <span class='kw'>end</span>
-
-          <span class='comment'># Now some folklore. It happens that the most widely used Ruby
-</span>          <span class='comment'># implementation has bug in implementation of Kernel#caller. If method
-</span>          <span class='comment'># invocation takes more than one line, instead of line where the name
-</span>          <span class='comment'># of method was, we get one of the following lines (I suspect that it's
-</span>          <span class='comment'># always the one with first argument, but dont know exactly).
+    
+    
+          <span class='id identifier rubyid_protected'>protected</span>
+    
+          <span class='comment'># Returns code of arguments of calling method as an array of strings. When
+</span>          <span class='comment'># fails to find this data, returns nil.
 </span>          <span class='comment'>#
-</span>          <span class='comment'># As workaround we go up the file until we find line containing method
-</span>          <span class='comment'># name.
+</span>          <span class='comment'># Hic sunt leones
 </span>          <span class='comment'>#
-</span>          <span class='comment'># Another digression: what if one of the lines contain method name which
-</span>          <span class='comment'># is not its invocation, eg. inside string or comment? Well, then all
-</span>          <span class='comment'># this will fail, and you get &quot;false != true&quot;. It is a limitation, but
-</span>          <span class='comment'># I can live with that.
-</span>          <span class='id identifier rubyid_i'>i</span> <span class='op'>=</span> <span class='id identifier rubyid_line_number'>line_number</span> <span class='op'>-</span> <span class='int'>1</span>
-
-          <span class='kw'>while</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>&gt;</span> <span class='int'>0</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_lines'>lines</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_method'>method</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-            <span class='id identifier rubyid_i'>i</span> <span class='op'>-=</span> <span class='int'>1</span>
-          <span class='kw'>end</span>
-
-          <span class='comment'># Code to search is crated as invocation line and all following code.
-</span>          <span class='comment'># First line is trimmed to begin with method name.
-</span>          <span class='comment'>#
-</span>          <span class='comment'># After that part of code from begin is moved to anther variable and
-</span>          <span class='comment'># removed from code itself. This part will be called _fragment_.
-</span>          <span class='comment'>#
-</span>          <span class='comment'># Initial fragment contains method name and opening bracket, eg:
-</span>          <span class='comment'>#
-</span>          <span class='comment'>#   | fragment  | code                                  |
-</span>          <span class='comment'>#   assert_equal(arg1, arg2)\n# Some comment in next line
-</span>          <span class='id identifier rubyid_code'>code</span> <span class='op'>=</span> <span class='id identifier rubyid_lines'>lines</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span>
-          <span class='id identifier rubyid_start'>start</span> <span class='op'>=</span> <span class='id identifier rubyid_code'>code</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_method'>method</span><span class='rparen'>)</span>
-          <span class='id identifier rubyid_fragment'>fragment</span> <span class='op'>=</span> <span class='id identifier rubyid_code'>code</span><span class='lbracket'>[</span><span class='id identifier rubyid_start'>start</span><span class='comma'>,</span> <span class='id identifier rubyid_method'>method</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>+</span> <span class='int'>1</span><span class='rbracket'>]</span>
-          <span class='id identifier rubyid_code'>code</span> <span class='op'>=</span> <span class='id identifier rubyid_code'>code</span><span class='lbracket'>[</span><span class='lparen'>(</span><span class='id identifier rubyid_start'>start</span> <span class='op'>+</span> <span class='id identifier rubyid_method'>method</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>+</span> <span class='int'>1</span><span class='rparen'>)</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span>
-
-          <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>=</span> <span class='kw'>nil</span>
-
-          <span class='comment'># Now in loop we check if fragment contains valid (parsable) Ruby code.
-</span>          <span class='comment'># Syntax error in code cause exception to be thrown. In that case, we just
-</span>          <span class='comment'># add another char from code to fragment and check again, until success
-</span>          <span class='comment'># or and of code.
-</span>          <span class='id identifier rubyid_code'>code</span><span class='period'>.</span><span class='id identifier rubyid_each_char'>each_char</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_ch'>ch</span><span class='op'>|</span>
+</span>          <span class='comment'># @return [Array]   code of arguments of calling method or nil in case of
+</span>          <span class='comment'>#   failure.
+</span>          <span class='kw'>def</span> <span class='id identifier rubyid_get_arguments_code'>get_arguments_code</span>
+    
+            <span class='comment'># Stack trace certainly will be useful.
+</span>            <span class='id identifier rubyid_stack_trace'>stack_trace</span> <span class='op'>=</span> <span class='id identifier rubyid_caller'>caller</span>
+    
+            <span class='comment'># First of all, calling method name will be needed. It's simply parsed
+</span>            <span class='comment'># from stack trace using regexp.
+</span>            <span class='id identifier rubyid_method'>method</span> <span class='op'>=</span> <span class='id identifier rubyid_stack_trace'>stack_trace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>:in `(.*)'</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+    
+            <span class='comment'># Going deeper, file path and line, where previous method was called are
+</span>            <span class='comment'># parsed.
+</span>            <span class='id identifier rubyid_t'>t</span> <span class='op'>=</span> <span class='id identifier rubyid_stack_trace'>stack_trace</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([^:]+):(\d+):</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='id identifier rubyid_t'>t</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+            <span class='id identifier rubyid_line_number'>line_number</span> <span class='op'>=</span> <span class='id identifier rubyid_t'>t</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+    
+            <span class='comment'># Read the file
+</span>            <span class='id identifier rubyid_lines'>lines</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    
             <span class='kw'>begin</span>
-              <span class='id identifier rubyid_parser'>parser</span> <span class='op'>=</span> <span class='const'>RubyParser</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
-              <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>=</span> <span class='id identifier rubyid_parser'>parser</span><span class='period'>.</span><span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_fragment'>fragment</span><span class='rparen'>)</span>
-              <span class='kw'>break</span>
-            <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
-              <span class='id identifier rubyid_fragment'>fragment</span> <span class='op'>+=</span> <span class='id identifier rubyid_ch'>ch</span>
+              <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>r</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_io'>io</span><span class='op'>|</span>
+                <span class='id identifier rubyid_lines'>lines</span> <span class='op'>=</span> <span class='id identifier rubyid_io'>io</span><span class='period'>.</span><span class='id identifier rubyid_readlines'>readlines</span>
+              <span class='kw'>end</span>
+            <span class='kw'>rescue</span> <span class='const'>Errno</span><span class='op'>::</span><span class='const'>ENOENT</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+              <span class='comment'># May this file not exist at all? I don't know, but it will be foolish
+</span>              <span class='comment'># to assume, that if I don't know, it cannot happen.
+</span>              <span class='kw'>return</span> <span class='kw'>nil</span>
+            <span class='kw'>rescue</span> <span class='const'>IOError</span>
+              <span class='comment'># This can happen always for several reasons
+</span>              <span class='kw'>return</span> <span class='kw'>nil</span>
             <span class='kw'>end</span>
+    
+            <span class='comment'># Now some folklore. It happens that the most widely used Ruby
+</span>            <span class='comment'># implementation has bug in implementation of Kernel#caller. If method
+</span>            <span class='comment'># invocation takes more than one line, instead of line where the name
+</span>            <span class='comment'># of method was, we get one of the following lines (I suspect that it's
+</span>            <span class='comment'># always the one with first argument, but dont know exactly).
+</span>            <span class='comment'>#
+</span>            <span class='comment'># As workaround we go up the file until we find line containing method
+</span>            <span class='comment'># name.
+</span>            <span class='comment'>#
+</span>            <span class='comment'># Another digression: what if one of the lines contain method name which
+</span>            <span class='comment'># is not its invocation, eg. inside string or comment? Well, then all
+</span>            <span class='comment'># this will fail, and you get &quot;false != true&quot;. It is a limitation, but
+</span>            <span class='comment'># I can live with that.
+</span>            <span class='id identifier rubyid_i'>i</span> <span class='op'>=</span> <span class='id identifier rubyid_line_number'>line_number</span> <span class='op'>-</span> <span class='int'>1</span>
+    
+            <span class='kw'>while</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>&gt;</span> <span class='int'>0</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_lines'>lines</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_method'>method</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+              <span class='id identifier rubyid_i'>i</span> <span class='op'>-=</span> <span class='int'>1</span>
+            <span class='kw'>end</span>
+    
+            <span class='comment'># Code to search is crated as invocation line and all following code.
+</span>            <span class='comment'># First line is trimmed to begin with method name.
+</span>            <span class='comment'>#
+</span>            <span class='comment'># After that part of code from begin is moved to anther variable and
+</span>            <span class='comment'># removed from code itself. This part will be called _fragment_.
+</span>            <span class='comment'>#
+</span>            <span class='comment'># Initial fragment contains method name and opening bracket, eg:
+</span>            <span class='comment'>#
+</span>            <span class='comment'>#   | fragment  | code                                  |
+</span>            <span class='comment'>#   assert_equal(arg1, arg2)\n# Some comment in next line
+</span>            <span class='id identifier rubyid_code'>code</span> <span class='op'>=</span> <span class='id identifier rubyid_lines'>lines</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span>
+            <span class='id identifier rubyid_start'>start</span> <span class='op'>=</span> <span class='id identifier rubyid_code'>code</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_method'>method</span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_fragment'>fragment</span> <span class='op'>=</span> <span class='id identifier rubyid_code'>code</span><span class='lbracket'>[</span><span class='id identifier rubyid_start'>start</span><span class='comma'>,</span> <span class='id identifier rubyid_method'>method</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>+</span> <span class='int'>1</span><span class='rbracket'>]</span>
+            <span class='id identifier rubyid_code'>code</span> <span class='op'>=</span> <span class='id identifier rubyid_code'>code</span><span class='lbracket'>[</span><span class='lparen'>(</span><span class='id identifier rubyid_start'>start</span> <span class='op'>+</span> <span class='id identifier rubyid_method'>method</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>+</span> <span class='int'>1</span><span class='rparen'>)</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span>
+    
+            <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>=</span> <span class='kw'>nil</span>
+    
+            <span class='comment'># Now in loop we check if fragment contains valid (parsable) Ruby code.
+</span>            <span class='comment'># Syntax error in code cause exception to be thrown. In that case, we just
+</span>            <span class='comment'># add another char from code to fragment and check again, until success
+</span>            <span class='comment'># or and of code.
+</span>            <span class='id identifier rubyid_code'>code</span><span class='period'>.</span><span class='id identifier rubyid_each_char'>each_char</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_ch'>ch</span><span class='op'>|</span>
+              <span class='kw'>begin</span>
+                <span class='id identifier rubyid_parser'>parser</span> <span class='op'>=</span> <span class='const'>RubyParser</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+                <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>=</span> <span class='id identifier rubyid_parser'>parser</span><span class='period'>.</span><span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_fragment'>fragment</span><span class='rparen'>)</span>
+                <span class='kw'>break</span>
+              <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+                <span class='id identifier rubyid_fragment'>fragment</span> <span class='op'>+=</span> <span class='id identifier rubyid_ch'>ch</span>
+              <span class='kw'>end</span>
+            <span class='kw'>end</span>
+    
+            <span class='comment'># Code ended, but invocation cannot be parsed. Again: can this actually
+</span>            <span class='comment'># happen?
+</span>            <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_sexp'>sexp</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    
+            <span class='comment'># Parsed code results in structure called s-expression (sexps). It has
+</span>            <span class='comment'># a tree-like structure that describes Ruby code and thus can be turned
+</span>            <span class='comment'># into code again (+ all the whitespace will be removed).
+</span>            <span class='id identifier rubyid_ruby2ruby'>ruby2ruby</span> <span class='op'>=</span> <span class='const'>Ruby2Ruby</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+            <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    
+            <span class='id identifier rubyid_sexp'>sexp</span><span class='lbracket'>[</span><span class='int'>3</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_arg'>arg</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+              <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>==</span> <span class='int'>0</span>
+              <span class='id identifier rubyid_result'>result</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_ruby2ruby'>ruby2ruby</span><span class='period'>.</span><span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_arg'>arg</span><span class='rparen'>)</span>
+            <span class='kw'>end</span>
+    
+            <span class='comment'># Here we can return array of source code strings
+</span>            <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span>
           <span class='kw'>end</span>
-
-          <span class='comment'># Code ended, but invocation cannot be parsed. Again: can this actually
-</span>          <span class='comment'># happen?
-</span>          <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_sexp'>sexp</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-
-          <span class='comment'># Parsed code results in structure called s-expression (sexps). It has
-</span>          <span class='comment'># a tree-like structure that describes Ruby code and thus can be turned
-</span>          <span class='comment'># into code again (+ all the whitespace will be removed).
-</span>          <span class='id identifier rubyid_ruby2ruby'>ruby2ruby</span> <span class='op'>=</span> <span class='const'>Ruby2Ruby</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
-          <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-
-          <span class='id identifier rubyid_sexp'>sexp</span><span class='lbracket'>[</span><span class='int'>3</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_arg'>arg</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
-            <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>==</span> <span class='int'>0</span>
-            <span class='id identifier rubyid_result'>result</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_ruby2ruby'>ruby2ruby</span><span class='period'>.</span><span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_arg'>arg</span><span class='rparen'>)</span>
-          <span class='kw'>end</span>
-
-          <span class='comment'># Here we can return array of source code strings
-</span>          <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span>
-        <span class='kw'>end</span>
-
-      <span class='kw'>end</span> <span class='comment'># module Assertions
-</span>
-    <span class='kw'>end</span> <span class='comment'># module VerboseUnit
-</span>  <span class='kw'>end</span> <span class='comment'># module Test
+    
+        <span class='kw'>end</span> <span class='comment'># module Assertions
+</span>    
+    
+      <span class='kw'>end</span> <span class='comment'># module VerboseUnit
+</span>    <span class='kw'>end</span> <span class='comment'># module Test
 </span></code></pre>
-<h2>test/verbose_unit/assertion_failed_error.rb</h2>
+<h2>lib/test/verbose_unit/assertion_failed_error.rb</h2>
 <pre class="code ruby"><code>
-  <span class='kw'>module</span> <span class='const'>Test</span>
-    <span class='kw'>module</span> <span class='const'>VerboseUnit</span>
-
-      <span class='comment'># This class faciliate two tasks for us:
-</span>      <span class='comment'>#   - allows us to distinguish VerboseUnit exception from other exceptions,
-</span>      <span class='comment'>#   - lets us create an exception with custom backtrace in one line.
-</span>      <span class='kw'>class</span> <span class='const'>AssertionFailedError</span> <span class='op'>&lt;</span> <span class='const'>Exception</span>
-
-        <span class='comment'># Constructor sets message and stack trace for exception
-</span>        <span class='comment'># @param [String] message     human-readable message explaining cause of exception
-</span>        <span class='comment'># @param [Array] stack_trace  backtrace for exception
-</span>        <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='comma'>,</span> <span class='id identifier rubyid_stack_trace'>stack_trace</span><span class='rparen'>)</span>
-          <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='rparen'>)</span>
-          <span class='id identifier rubyid_set_backtrace'>set_backtrace</span><span class='lparen'>(</span><span class='id identifier rubyid_stack_trace'>stack_trace</span><span class='rparen'>)</span>
+    <span class='kw'>module</span> <span class='const'>Test</span>
+      <span class='kw'>module</span> <span class='const'>VerboseUnit</span>
+    
+    
+        <span class='comment'># This class faciliate two tasks for us:
+</span>        <span class='comment'>#   - allows us to distinguish VerboseUnit exception from other exceptions,
+</span>        <span class='comment'>#   - lets us create an exception with custom backtrace in one line.
+</span>        <span class='kw'>class</span> <span class='const'>AssertionFailedError</span> <span class='op'>&lt;</span> <span class='const'>Exception</span>
+    
+          <span class='comment'># Constructor sets message and stack trace for exception
+</span>          <span class='comment'># @param [String] message     human-readable message explaining cause of exception
+</span>          <span class='comment'># @param [Array] stack_trace  backtrace for exception
+</span>          <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='comma'>,</span> <span class='id identifier rubyid_stack_trace'>stack_trace</span><span class='rparen'>)</span>
+            <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_set_backtrace'>set_backtrace</span><span class='lparen'>(</span><span class='id identifier rubyid_stack_trace'>stack_trace</span><span class='rparen'>)</span>
+          <span class='kw'>end</span>
+    
         <span class='kw'>end</span>
-
-      <span class='kw'>end</span>
-
-    <span class='kw'>end</span> <span class='comment'># module VerboseUnit
-</span>  <span class='kw'>end</span> <span class='comment'># module Test</span></code></pre>
+    
+    
+      <span class='kw'>end</span> <span class='comment'># module VerboseUnit
+</span>    <span class='kw'>end</span> <span class='comment'># module Test
+</span></code></pre>
+<h2>test/test_assertions.rb</h2>
+<pre class="code ruby"><code>
+    $:.unshift(&quot;./lib&quot;)
+    
+    require 'test/verbose_unit'
+    require 'test/unit'
+    
+    
+    class TestedTestCase &lt; Test::VerboseUnit::TestCase
+    end
+    
+    
+    class AssertionsTestCase &lt; Test::Unit::TestCase
+    
+    
+      def setup
+        @test_case = TestedTestCase.new
+      end
+    
+    
+      def cleanup
+      end
+    
+    
+      def equal_message(code_a, value_a, code_b, value_b)
+    &lt;&lt;EOS
+    #{code_a} != #{code_b}
+    where:
+    \t#{code_a} = #{value_a.inspect}
+    \t#{code_b} = #{value_b.inspect}
+    EOS
+      end
+    
+    
+      def test_equal_1
+        assert_raise(Test::VerboseUnit::AssertionFailedError) do
+          @test_case.assert_equal(true, false)
+        end
+    
+        begin
+          @test_case.assert_equal(true, false)
+        rescue Test::VerboseUnit::AssertionFailedError =&gt; e
+          expected_message = equal_message(&quot;true&quot;, true, &quot;false&quot;, false)
+          assert_equal(expected_message, e.message)
+        end
+      end
+    
+    
+      def test_equal_2
+        assert_raise(Test::VerboseUnit::AssertionFailedError) do
+          @test_case.assert_equal(NilClass, Class)
+        end
+    
+        begin
+          @test_case.assert_equal(NilClass, Class)
+        rescue Test::VerboseUnit::AssertionFailedError =&gt; e
+          expected_message = equal_message(&quot;NilClass&quot;, NilClass, &quot;Class&quot;, Class)
+          assert_equal(expected_message, e.message)
+        end
+      end
+    
+    
+      def test_equal_3
+        assert_raise(Test::VerboseUnit::AssertionFailedError) do
+          @test_case.assert_equal(
+            Math::PI,
+            3.14
+          )
+        end
+    
+        begin
+          @test_case.assert_equal(
+            Math::PI,
+            3.14
+          )
+        rescue Test::VerboseUnit::AssertionFailedError =&gt; e
+          expected_message = equal_message(&quot;Math::PI&quot;, Math::PI, &quot;3.14&quot;, 3.14)
+          assert_equal(expected_message, e.message)
+        end
+      end
+    
+    
+      def test_equal_4
+        assert_raise(Test::VerboseUnit::AssertionFailedError) do
+          @test_case.assert_equal(
+            # This test checks if additional tokens, like comments doesn't have
+            # negative impact on library operation.
+            Math::PI,
+    =begin
+      Antoher multi-
+      line comment
+    =end
+            3.14
+          )
+        end
+    
+        begin
+          @test_case.assert_equal(
+            # This test checks if additional tokens, like comments doesn't have
+            # negative impact on library operation.
+            Math::PI,
+    =begin
+      Antoher multi-
+      line comment
+    =end
+            3.14
+          )
+        rescue Test::VerboseUnit::AssertionFailedError =&gt; e
+          expected_message = equal_message(&quot;Math::PI&quot;, Math::PI, &quot;3.14&quot;, 3.14)
+          assert_equal(expected_message, e.message)
+        end
+      end
+    
+    
+      def test_equal_5
+        assert_raise(Test::VerboseUnit::AssertionFailedError) do
+          @test_case.assert_equal(
+            %w[warsaw berlin paris budapest].select { |c| c.index('i').nil? },
+            ['warsaw', 'budapest'].collect do |c|
+              c.capitalize
+            end
+          )
+        end
+    
+        begin
+          @test_case.assert_equal(
+            %w[warsaw berlin paris budapest].select { |c| c.index('i').nil? },
+            ['warsaw', 'budapest'].collect do |c|
+              c.capitalize
+            end
+          )
+        rescue Test::VerboseUnit::AssertionFailedError =&gt; e
+          expected_message = equal_message(
+            &quot;[\&quot;warsaw\&quot;, \&quot;berlin\&quot;, \&quot;paris\&quot;, \&quot;budapest\&quot;].select { |c| c.index(\&quot;i\&quot;).nil? }&quot;,
+            %w[warsaw berlin paris budapest].select { |c| c.index(&quot;i&quot;).nil? },
+            &quot;[\&quot;warsaw\&quot;, \&quot;budapest\&quot;].collect { |c| c.capitalize }&quot;,
+            ['warsaw', 'budapest'].collect do |c|
+              c.capitalize
+            end
+          )
+          assert_equal(expected_message, e.message)
+        end
+      end
+    
+    
+    end</code></pre>
 </div></div>
     
     <div id="footer">
-  Generated on Thu Apr 19 17:46:40 2012 by 
+  Generated on Mon Apr 23 11:34:57 2012 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.7.5 (ruby-1.9.2).
 </div>

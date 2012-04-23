@@ -120,7 +120,8 @@ generate more appropriate error messages.
 In C we could do something like this:
 </p>
 <pre class="code ruby"><code>
-  assert(a) ( (a) ? (1) : ( printf (&quot;%s:%d: %s(): assertion failed (%s).\n&quot;, __FILE__, __LINE__, __FUNCTION__, #a), 0) )
+  assert(a) ( (a) ? (1) : ( printf (&quot;%s:%d: %s(): assertion failed (%s).\n&quot;, \
+    __FILE__, __LINE__, __FUNCTION__, #a), 0) )
 </code></pre>
 <p>
 Preprocessor will replace #a with actual <b>code</b> that we passed to
@@ -233,6 +234,31 @@ invocation.
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#test_3-instance_method" title="#test_3 (instance method)">- (Object) <strong>test_3</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+In this example we use even more complex syntax, but it aims to show other
+thing.
+</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -288,7 +314,6 @@ string).
       <pre class="lines">
 
 
-56
 57
 58
 59
@@ -306,10 +331,11 @@ string).
 71
 72
 73
-74</pre>
+74
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'example.rb', line 56</span>
+      <pre class="code"><span class="info file"># File 'example.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_test_1'>test_1</span>
   <span class='comment'># Here we do some calulcations; usually we use some library that we want
@@ -360,7 +386,6 @@ This method in turn will do assertion with somewhat more complex invocation
       <pre class="lines">
 
 
-78
 79
 80
 81
@@ -372,22 +397,78 @@ This method in turn will do assertion with somewhat more complex invocation
 87
 88
 89
-90</pre>
+90
+91</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'example.rb', line 78</span>
+      <pre class="code"><span class="info file"># File 'example.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_test_2'>test_2</span>
   <span class='comment'># This assertion arguments contain many syntax structures that are hard
 </span>  <span class='comment'># to parse without actual ruby parser, eg. strings and comments with brackets,
-</span>  <span class='comment'># event whole loops, as they return value too.
+</span>  <span class='comment'># even whole loops, as they return value too.
 </span>  <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span>
 
     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Jakis\&quot;) tekst</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span>
-        <span class='const'>Fixnum</span>
+        <span class='int'>10</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span>
       <span class='rparen'>)</span><span class='comma'>,</span>
     <span class='comment'># Some (comment &quot;string&quot;
 </span>    <span class='int'>123</span>
+  <span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="test_3-instance_method">
+  
+    - (<tt>Object</tt>) <strong>test_3</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+In this example we use even more complex syntax, but it aims to show other
+thing. Statements below can be described in Ruby in more than one way. For
+example strings can be denoted using apostrophes or quotation marks. If you
+run this test, you will see, that syntax used in exception message differs
+from original code (this can be considered as another limitation or a
+feature of library).
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+100
+101
+102
+103
+104
+105
+106
+107</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'example.rb', line 100</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_test_3'>test_3</span>
+  <span class='id identifier rubyid_assert_equal'>assert_equal</span><span class='lparen'>(</span>
+    <span class='qwords_beg'>%w[</span><span class='tstring_content'>warsaw</span><span class='words_sep'> </span><span class='tstring_content'>berlin</span><span class='words_sep'> </span><span class='tstring_content'>paris</span><span class='words_sep'> </span><span class='tstring_content'>budapest</span><span class='words_sep'>]</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>i</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>warsaw</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>budapest</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
+      <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_capitalize'>capitalize</span>
+    <span class='kw'>end</span>
   <span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -400,7 +481,7 @@ This method in turn will do assertion with somewhat more complex invocation
 </div>
     
     <div id="footer">
-  Generated on Thu Apr 19 17:46:40 2012 by 
+  Generated on Mon Apr 23 11:34:57 2012 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.7.5 (ruby-1.9.2).
 </div>
