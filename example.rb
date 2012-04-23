@@ -91,6 +91,16 @@ class ExampleTestCase < Test::VerboseUnit::TestCase
   end
 
 
+  # Example with loops
+  def test_3
+    assert_equal(
+      %w[warsaw berlin paris budapest].select { |c| c.index('i').nil? },
+      ['warsaw', 'budapest'].collect do |c|
+        c.capitalize
+      end
+    )
+  end
+
 end
 
 
