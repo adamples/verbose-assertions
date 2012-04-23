@@ -91,7 +91,12 @@ class ExampleTestCase < Test::VerboseUnit::TestCase
   end
 
 
-  # Example with loops
+  # In this example we use even more complex syntax, but it aims to show other
+  # thing. Statements below can be described in Ruby in more than one way. For
+  # example strings can be denoted using apostrophes or quotation marks. If you
+  # run this test, you will see, that syntax used in exception message differs
+  # from original code (this can be considered as another limitation or a feature
+  # of library).
   def test_3
     assert_equal(
       %w[warsaw berlin paris budapest].select { |c| c.index('i').nil? },
